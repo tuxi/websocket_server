@@ -1,6 +1,6 @@
 [Unit]
 
-Description=Django Private Chat example
+Description=Django web socket chat demo.
 
 After=network.target
 
