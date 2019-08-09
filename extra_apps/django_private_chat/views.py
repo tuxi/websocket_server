@@ -39,9 +39,10 @@ class DialogListView(LoginRequiredMixin, generic.ListView):
             context['opponent_username'] = context['active_dialog'].opponent.username
         else:
             context['opponent_username'] = context['active_dialog'].owner.username
-        context['ws_server_path'] = '{}://{}:{}/'.format(
+        context['ws_server_path'] = '{}://{}:{}/{}'.format(
             settings.CHAT_WS_SERVER_PROTOCOL,
             settings.CHAT_WS_CLIENT_HOST,
             settings.CHAT_WS_CLIENT_PORT,
+            settings.CHAT_WS_CLIENT_ROUTE
         )
         return context

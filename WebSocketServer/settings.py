@@ -45,12 +45,15 @@ if DEBUG:
     # 测试环境请求websocket的服务器地址
     CHAT_WS_CLIENT_HOST = CHAT_WS_SERVER_HOST
     CHAT_WS_CLIENT_PORT = CHAT_WS_SERVER_PORT
+    CHAT_WS_CLIENT_ROUTE = ''
 else:
     # 生产环境使用nginx做websocket的反向代理
     # CHAT_WS_CLIENT_HOST = '10.211.55.4'
     # CHAT_WS_CLIENT_PORT = 80
-    CHAT_WS_CLIENT_HOST = 'chat.enba.com/ws'
+    CHAT_WS_CLIENT_HOST = 'chat.enba.com'
     CHAT_WS_CLIENT_PORT = 80
+    CHAT_WS_CLIENT_ROUTE = 'ws/'
+
 
 
 # Application definition
