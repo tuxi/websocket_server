@@ -37,16 +37,20 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4', 'sock
 
 # django-private-chat config
 CHAT_WS_SERVER_PROTOCOL = 'ws'
+CHAT_WS_SERVER_HOST = 'localhost'
+CHAT_WS_SERVER_PORT = 5002
+
+
 if DEBUG:
-    # 测试环境请求执行本地的服务器
-    CHAT_WS_SERVER_HOST = 'localhost'
-    CHAT_WS_SERVER_PORT = 5002
+    # 测试环境请求websocket的服务器地址
+    CHAT_WS_CLIENT_HOST = CHAT_WS_SERVER_HOST
+    CHAT_WS_CLIENT_PORT = CHAT_WS_SERVER_PORT
 else:
     # 生产环境使用nginx做websocket的反向代理
-    # CHAT_WS_SERVER_HOST = '10.211.55.4'
-    # CHAT_WS_SERVER_PORT = 8010
-    CHAT_WS_SERVER_HOST = 'socket.enba.com'
-    CHAT_WS_SERVER_PORT = 80
+    # CHAT_WS_CLIENT_HOST = '10.211.55.4'
+    # CHAT_WS_CLIENT_PORT = 8010
+    CHAT_WS_CLIENT_HOST = 'socket.enba.com'
+    CHAT_WS_CLIENT_PORT = 80
 
 
 # Application definition
