@@ -33,7 +33,7 @@ SECRET_KEY = '&ds85fwdgh&r&e2*7xnfcmvva(s@h*%5r39+aau&8o!w^!0mjg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 AUTH_USER_MODEL = 'users.UserProfile'
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4', 'socket.enba.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4']
 
 # django-private-chat config
 CHAT_WS_SERVER_PROTOCOL = 'ws'
@@ -48,8 +48,8 @@ if DEBUG:
 else:
     # 生产环境使用nginx做websocket的反向代理
     # CHAT_WS_CLIENT_HOST = '10.211.55.4'
-    # CHAT_WS_CLIENT_PORT = 8010
-    CHAT_WS_CLIENT_HOST = 'socket.enba.com'
+    # CHAT_WS_CLIENT_PORT = 80
+    CHAT_WS_CLIENT_HOST = 'chat.enba.com/ws'
     CHAT_WS_CLIENT_PORT = 80
 
 
@@ -259,7 +259,7 @@ PINAX_LIKES_LIKABLE_MODELS = {
 }
 
 
-INTERNAL_IPS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4', 'socket.enba.com']
+INTERNAL_IPS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4']
 SESSION_COOKIE_AGE = 12096000
 LOGIN_REDIRECT_URL = '/xadmin/'
 
