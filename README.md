@@ -1,5 +1,5 @@
 ### websocket server
-基于django-private-chat 和 djangorestframework 的websockt 服务端示例
+基于[django-private-chat](https://github.com/Bearle/django-private-chat) 和 djangorestframework 的websockt 服务端示例
 
 ### 初始化项目
 
@@ -45,3 +45,19 @@ python manage.py runserver 8000
 ```
 python manage.py collectstatic --noinput
 ```
+
+- 运行`run_chat_server`启动websocket 服务
+```
+python manage.py run_chat_server
+```
+
+或者
+
+- 通过`systemd`服务的配置`run_chat_server`
+将项目中`bin/chatserver.service`拷贝到`/lib/systemd/system`目录下（注意：修改`.service`中的路径）。
+
+启动websocket 服务
+```
+sudo systemctl start chatserver.service
+```
+
