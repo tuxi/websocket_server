@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
 
-from WebSocketServer.settings import MEDIA_ROOT, STATICFILES_DIRS
+from WebSocketServer.settings import MEDIA_ROOT, STATICFILES_DIRS, DEBUG
 
 import xadmin
 
@@ -45,7 +45,7 @@ router.register(r'likes', LikeToggleView, base_name='likes')
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    url(r'^', include(router.urls)),
+    # url(r'^', include(router.urls)),
 
     url(r'^static/(?P<path>.*)$', serve, {'document_root': STATICFILES_DIRS[0]}, name='static'),
     # drf自带的认证方式
@@ -53,6 +53,16 @@ urlpatterns = [
     # jwt的认证方式
     url(r'^login/', obtain_jwt_token),
     # drf 文档
-    url(r'docs/', include_docs_urls(title="Video hub api docs")),
+    url(r'docs/', include_docs_urls(title="websocket api docs")),
     # url(r"^likes/", include("pinax.likes.urls", namespace="pinax_likes")),
+
+    url(r'', include('django_private_chat.urls')),
+    url(r'', include('chat.urls'))
 ]
+
+
+if DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

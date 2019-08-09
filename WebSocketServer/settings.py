@@ -35,6 +35,10 @@ DEBUG = True
 AUTH_USER_MODEL = 'users.UserProfile'
 ALLOWED_HOSTS = ["*"]
 
+# django-private-chat config
+CHAT_WS_SERVER_HOST = 'localhost'
+CHAT_WS_SERVER_PORT = 5002
+CHAT_WS_SERVER_PROTOCOL = 'ws'
 
 # Application definition
 
@@ -57,6 +61,15 @@ EXTRA_APPS = [
     'gunicorn',
 ]
 
+DJANGO_PRIVATE_CHAT = [
+    # django-private-chat config
+    'debug_toolbar',
+    'django_private_chat',
+    'chat.apps.ChatConfig'
+]
+
+EXTRA_APPS += DJANGO_PRIVATE_CHAT
+
 PERSONAL_APPS = [
     'users.apps.UsersConfig',
     'pinax.likes.apps.AppConfig',
@@ -64,8 +77,9 @@ PERSONAL_APPS = [
 
 INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
 
-MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+
+l = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,6 +88,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+from django import get_version
+from packaging import version
+
+if version.parse(get_version()) < version.parse("1.10"):
+    MIDDLEWARE_CLASSES = l
+    MIDDLEWARE_CLASSES += ['django.contrib.auth.middleware.SessionAuthenticationMiddleware', ]
+else:
+    MIDDLEWARE = l
 
 
 # 必须跟原域匹配才可获取发送 cookie 的权限
@@ -146,7 +169,10 @@ LANGUAGE_CODE = 'zh-hans'  #中文支持，django1.8以后支持；1.8以前是z
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
+USE_TZ = True
+# USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
+
+DATETIME_FORMAT = "d.m.Y H:i:s"
 
 AUTHENTICATION_BACKENDS = (
     # 使用自定义的用户验证, 用户登录时调用 users.views.CustomBackend验证
@@ -181,8 +207,6 @@ REST_FRAMEWORK = {
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
-
 STATIC_URL = '/static/'
 # 部署的时候注释掉，不然无法执行collecstatic命令，运行时打开
 STATICFILES_DIRS = [
@@ -219,4 +243,15 @@ PINAX_LIKES_LIKABLE_MODELS = {
             # "css_class_off": "fa-heart-o",
             "allowed": lambda user, obj: True
         },
+}
+
+
+INTERNAL_IPS = ['127.0.0.1', 'localhost']
+SESSION_COOKIE_AGE = 12096000
+LOGIN_REDIRECT_URL = '/xadmin/'
+
+# 配置django-debug-toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    # 此项原本为google指向的一个js，改成这样就不会报404了。
+    'JQUERY_URL': '//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'
 }
