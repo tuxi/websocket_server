@@ -69,3 +69,4 @@ cp bin/chatserver.service /lib/systemd/system
 sudo systemctl start chatserver.service
 ```
 
+如果时修改或新建的服务文件需要先执行systemctl daemon-reload ，告诉systemd系统，然后再启动`chatserver.service`，不然无法正常启动。
