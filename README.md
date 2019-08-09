@@ -39,7 +39,7 @@ python manage.py createsuperuser
 - 运行项目
 ```
 python manage.py runserver 8000
-
+```
 
 - 非DEBUG时，需要收集静态文件
 ```
