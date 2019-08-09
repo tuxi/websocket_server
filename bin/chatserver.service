@@ -8,7 +8,7 @@ After=network.target
 
 [Service]
 
-User=user
+User=ubuntu
 
 Environment="DJANGO_SECRET_KEY=sssssomekey"
 
@@ -16,9 +16,14 @@ Environment="DJANGO_SETTINGS_MODULE=WebSocketServer.settings"
 
 Group=www-data
 
+# 失败时候重启
+Restart=on-failure
+
+#工作目录
 WorkingDirectory=/var/www/websocket_server/
 
-ExecStart=/home/ubuntu/.virtualenvs/websocketserver/bin /var/www/websocket_server/manage.py run_chat_server
+# 执行的命令
+ExecStart=/home/ubuntu/.virtualenvs/websocketserver/bin/python /var/www/websocket_server/manage.py run_chat_server
 
 [Install]
 
