@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
 
-from websocket_server.settings import MEDIA_ROOT, STATICFILES_DIRS
+from WebSocketServer.settings import MEDIA_ROOT, STATICFILES_DIRS
 
 import xadmin
 

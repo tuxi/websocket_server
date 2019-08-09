@@ -31,7 +31,7 @@ class SmsSerializer(serializers.Serializer):
             raise serializers.ValidationError("用户已经存在")
 
         # 手机号码是否合法
-        from websocket_server.settings import REGEX_MOBILE
+        from WebSocketServer.settings import REGEX_MOBILE
         import re
         if not re.match(REGEX_MOBILE, mobile):
             raise serializers.ValidationError("手机号非法")

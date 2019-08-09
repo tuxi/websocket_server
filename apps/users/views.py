@@ -13,7 +13,7 @@ from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handl
 
 from .serializers import SmsSerializer, UserRegisterSerializer, UserDetailSerializer, UserUpdateSerializer
 from utils.yunpian import YunPian
-from websocket_server.settings import YUNPIAN_APIKEY
+from WebSocketServer.settings import YUNPIAN_APIKEY
 from .models import VerifyCode
 
 # Create your views here.

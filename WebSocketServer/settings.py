@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
-from websocket_server.private_config import YUNPIAN_APIKEY
+from WebSocketServer.private_config import YUNPIAN_APIKEY
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -85,7 +85,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # 允许所有的请求头
 CORS_ALLOW_HEADERS = (' * ')
 
-ROOT_URLCONF = 'websocket_server.urls'
+ROOT_URLCONF = 'WebSocketServer.urls'
 
 TEMPLATES = [
     {
@@ -106,7 +106,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'websocket_server.wsgi.application'
+WSGI_APPLICATION = 'WebSocketServer.wsgi.application'
 
 
 # Database
