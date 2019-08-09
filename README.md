@@ -3,6 +3,8 @@
 
 ### 初始化项目
 
+- python3.6
+
 - 创建python虚拟环境
 ```angular2html
 mkvirtualenv -p /usr/bin/python3 websocketserver
@@ -36,7 +38,8 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-- 运行项目
+### 运行前端示例
+- 运行
 ```
 python manage.py runserver 8000
 ```
@@ -46,6 +49,8 @@ python manage.py runserver 8000
 python manage.py collectstatic --noinput
 ```
 
+### 运行`django-private-chat`服务端
+
 - 运行`run_chat_server`启动websocket 服务
 ```
 python manage.py run_chat_server
@@ -54,7 +59,10 @@ python manage.py run_chat_server
 或者
 
 - 通过`systemd`服务的配置`run_chat_server`
-将项目中`bin/chatserver.service`拷贝到`/lib/systemd/system`目录下（注意：修改`.service`中的路径）。
+将项目中`bin/chatserver.service`拷贝到`/lib/systemd/system`目录下（注意：修改`.service`中的项目路径）。
+```
+cp bin/chatserver.service /lib/systemd/system
+```
 
 启动websocket 服务
 ```
