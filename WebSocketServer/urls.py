@@ -27,6 +27,7 @@ import xadmin
 
 from users.views import SmsCodeViewSet, UserViewSet
 from pinax.likes.apiviews import LikeToggleView
+from django_private_chat.views.apiview import DialogListView, MessageListView
 
 # 通过router绑定url
 router = DefaultRouter()
@@ -35,6 +36,8 @@ router = DefaultRouter()
 router.register(r'code', SmsCodeViewSet, base_name='code')
 # 用户
 router.register(r'users', UserViewSet, base_name='users')
+router.register(r'dialog', DialogListView, base_name='dialog')
+router.register(r'message', MessageListView, base_name='message')
 
 
 # 用户点赞列表、添加点赞、删除点赞 6
@@ -45,7 +48,7 @@ router.register(r'likes', LikeToggleView, base_name='likes')
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    # url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
 
     url(r'^static/(?P<path>.*)$', serve, {'document_root': STATICFILES_DIRS[0]}, name='static'),
     # drf自带的认证方式

@@ -5,8 +5,8 @@ try:
     from django.urls import reverse
 except ImportError:
     from django.core.urlresolvers import reverse
-from . import models
-from . import utils
+from django_private_chat import models
+from django_private_chat import utils
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.conf import settings

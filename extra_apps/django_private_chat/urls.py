@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
-
-from . import views
+from .views import view
 
 urlpatterns = [
     url(
         regex=r'^dialogs/(?P<username>[\w.@+-]+)$',
-        view=views.DialogListView.as_view(),
+        view=view.DialogListView.as_view(),
         name='dialogs_detail'
     ),
     url(
         regex=r'^dialogs/$',
-        view=views.DialogListView.as_view(),
+        view=view.DialogListView.as_view(),
         name='dialogs'
     ),
 ]

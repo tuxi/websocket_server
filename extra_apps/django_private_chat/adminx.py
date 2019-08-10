@@ -3,6 +3,9 @@ from .models import Dialog, Message
 
 
 class DialogAdmin(object):
+    '''
+    对话列表，显示所有与我有过对话的列表
+    '''
     list_display = ('id', 'created', 'modified', 'owner', 'opponent')
     list_filter = ('created', 'modified', 'owner', 'opponent')
 

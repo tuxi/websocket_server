@@ -54,9 +54,9 @@ else:
     CHAT_WS_SERVER_PROTOCOL = 'wss'
     CHAT_WS_CLIENT_PORT = 443
 
-    # CHAT_WS_CLIENT_HOST = '10.211.55.4'
-    # CHAT_WS_SERVER_PROTOCOL = 'ws'
-    # CHAT_WS_CLIENT_PORT = 80
+    #CHAT_WS_CLIENT_HOST = '10.211.55.4'
+    #CHAT_WS_SERVER_PROTOCOL = 'ws'
+    #CHAT_WS_CLIENT_PORT = 80
 
 
 # Application definition

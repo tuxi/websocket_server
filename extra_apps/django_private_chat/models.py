@@ -9,6 +9,9 @@ from django.utils.timezone import localtime
 
 
 class Dialog(TimeStampedModel):
+    '''
+    一个对话, 一个聊天室，包含多个Message
+    '''
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Dialog owner"), related_name="selfDialogs",
                               on_delete=models.CASCADE)
     opponent = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Dialog opponent"), on_delete=models.CASCADE)
@@ -16,8 +19,16 @@ class Dialog(TimeStampedModel):
     def __str__(self):
         return _("Chat with ") + self.opponent.username
 
+    class Meta:
+        unique_together = (
+            ("owner", "opponent"),
+        )
+
 
 class Message(TimeStampedModel, SoftDeletableModel):
+    '''
+    一个消息
+    '''
     dialog = models.ForeignKey(Dialog, verbose_name=_("Dialog"), related_name="messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), related_name="messages",
                                on_delete=models.CASCADE)
