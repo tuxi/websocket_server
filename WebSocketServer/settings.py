@@ -36,7 +36,6 @@ AUTH_USER_MODEL = 'users.UserProfile'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4']
 
 # 服务端监听的端口 host
-CHAT_WS_SERVER_PROTOCOL = 'ws'
 CHAT_WS_SERVER_HOST = '127.0.0.1'
 CHAT_WS_SERVER_PORT = 5002
 
@@ -46,12 +45,15 @@ if DEBUG:
     CHAT_WS_CLIENT_HOST = CHAT_WS_SERVER_HOST
     CHAT_WS_CLIENT_PORT = CHAT_WS_SERVER_PORT
     CHAT_WS_CLIENT_ROUTE = ''
+    CHAT_WS_SERVER_PROTOCOL = 'ws'
 else:
     # 生产环境使用nginx做websocket的反向代理所监听的端口和host
     CHAT_WS_CLIENT_HOST = 'chat.enba.com'
-    # CHAT_WS_CLIENT_HOST = '10.211.55.4'
+    CHAT_WS_SERVER_PROTOCOL = 'wss'
     CHAT_WS_CLIENT_PORT = 80
     CHAT_WS_CLIENT_ROUTE = 'ws/'
+    #CHAT_WS_SERVER_PROTOCOL = 'ws'
+    #CHAT_WS_CLIENT_HOST = '10.211.55.4'
 
 
 # Application definition
