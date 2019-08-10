@@ -3,7 +3,8 @@
 
 
 ### 前端示例
-http://chat.enba.com/dialogs/，需要先登录
+http://chat.enba.com/dialogs/
+需要先登录
 ```
 useername: xiaoyuan
 password: admin123
