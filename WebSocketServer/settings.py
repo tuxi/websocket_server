@@ -48,14 +48,15 @@ if DEBUG:
     CHAT_WS_SERVER_PROTOCOL = 'ws'
 else:
     # 生产环境使用nginx做websocket的反向代理所监听的端口和host
-    CHAT_WS_CLIENT_PORT = 80
     CHAT_WS_CLIENT_ROUTE = 'ws/'
 
     CHAT_WS_CLIENT_HOST = 'chat.enba.com'
     CHAT_WS_SERVER_PROTOCOL = 'wss'
+    CHAT_WS_CLIENT_PORT = 443
 
     # CHAT_WS_CLIENT_HOST = '10.211.55.4'
     # CHAT_WS_SERVER_PROTOCOL = 'ws'
+    # CHAT_WS_CLIENT_PORT = 80
 
 
 # Application definition
