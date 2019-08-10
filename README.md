@@ -111,3 +111,34 @@ Error：`enba:186 WebSocket connection to 'ws://chat.enba.com/ws/9ygfrczj6le3buh
 
 解决：
 由于websocket服务使用`python manage.py run_chat_server`命令开启的，并且绑定的`host`为`localhost`、port为`5002`，通过`netstat -atnp`命令在本地服务器查询到`5002`网络端口已开启，而在阿里云ECS服务端未查询到此网络端口，期间很是郁闷，不过此时我已经找到了问题所在。此问题是由于nginx配置错误导致，在nginx的proxy_pass为`127.0.0.1:5002`，而websockets监听的为`localhost：5002`，导致反向代理失败。通过修改初始化`websockets.serve()`方法的`host`参数将`localhost`修改为`127.0.0.1`问题解决，重启`chatserver.service`问题解决。
+
+
+- 问题3: ws协议跨域问题
+由于HTTPS是基于SSL依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密，所以在HTTPS站点调用某些非SSL验证的资源时浏览器可能会阻止。比如原本https的前端项目中使用了类似`ws://chat.enba.com/ws/9ygfrczj6le3buh28b393cv20w5hzj4l/enba`的websockt协议，会出现类似如下错误：
+ ```
+ Mixed Content: The page at 'https://chat.enba.com/dialogs/enba' was loaded over HTTPS, but attempted to connect to the insecure WebSocket endpoint 'ws://chat.enba.com/ws/9ygfrczj6le3buh28b393cv20w5hzj4l/enba'. This request has been blocked; this endpoint must be available over WSS.
+ ```
+解决方法：
+ - 通过wss协议实际是websocket+SSL，就是在websocket协议上加入SSL层，类似https(http+SSL)。
+ - 利用nginx代理wss
+    - 客户端发起wss连接连到nginx
+    - nginx将wss协议的数据转换成ws协议数据并转发到websocket协议端口
+    - websocket收到数据后做业务逻辑处理
+    - websocket给客户端发送消息时，则是相反的过程，数据经过nginx/转换成wss协议然后发给客户端
+
+- nginx配置ssl和wss
+ 由于我在nginx配置中已配置ssl证书，所以只需要在server 443端口处，添加以下：
+ ```
+    # 此路由为websocket服务
+    location /ws/ { # CHAT_WS_CLIENT_ROUTE
+        # 后面必须要带`/`
+        proxy_pass http://websocket_server/;
+        proxy_http_version 1.1;
+        proxy_connect_timeout 10s;                #配置点1
+        proxy_read_timeout 60s;                  #配置点2，如果没效，可以考虑这>个时间配置长一点
+        proxy_send_timeout 12s;                  #配置点3
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+    }
+ ```
+ - websocket服务端和前端进行websocket通讯时使用`wss`协议头即可。
