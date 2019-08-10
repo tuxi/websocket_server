@@ -69,4 +69,17 @@ cp bin/chatserver.service /lib/systemd/system
 sudo systemctl start chatserver.service
 ```
 
-如果时修改或新建的服务文件需要先执行systemctl daemon-reload ，告诉systemd系统，然后再启动`chatserver.service`，不然无法正常启动。
+如果时修改或新建的服务文件需要先执行`systemctl daemon-reload` ，告诉systemd系统，然后再启动`chatserver.service`，不然无法正常启动。
+
+
+### 问题
+
+- 问题1: 本地测试环境下websocket正常工作，但是本地服务器使用nginx反向代理未正常在线，显示`WebSocket is already in CLOSING or CLOSED state.`。
+解决：
+此问题是由webSocket在nginx的proxy_pass配置错误导致的，`proxy_pass http://websocket_server;`修改为`proxy_pass http://websocket_server/;`问题解决。
+
+- 问题2: 生产环境部署到阿里云ECS时，使用nginx做websocket的反向代理后，客户端请求总是502。
+同样的配置，在本地服务器通过nginx没有，但是阿里云ECS部署就会导致502错误。
+
+解决：
+由于websocket服务使用`python manage.py run_chat_server`命令开启的，并且绑定的host为`localhost`、port为`5002`，通过`netstat -atnp`命令在本地服务器查询到`5002`网络端口已开启，而在阿里云ECS服务端未查询到此网络端口，期间很是郁闷，不过此时我已经找到了问题所在

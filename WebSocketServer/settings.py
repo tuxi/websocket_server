@@ -35,25 +35,23 @@ DEBUG = False
 AUTH_USER_MODEL = 'users.UserProfile'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4']
 
-# django-private-chat config
+# 服务端监听的端口 host
 CHAT_WS_SERVER_PROTOCOL = 'ws'
-CHAT_WS_SERVER_HOST = 'localhost'
+CHAT_WS_SERVER_HOST = '127.0.0.1'
 CHAT_WS_SERVER_PORT = 5002
 
-
+# 客户端请求的的端口 host
 if DEBUG:
     # 测试环境请求websocket的服务器地址
     CHAT_WS_CLIENT_HOST = CHAT_WS_SERVER_HOST
     CHAT_WS_CLIENT_PORT = CHAT_WS_SERVER_PORT
     CHAT_WS_CLIENT_ROUTE = ''
 else:
-    # 生产环境使用nginx做websocket的反向代理
-    # CHAT_WS_CLIENT_HOST = '10.211.55.4'
-    # CHAT_WS_CLIENT_PORT = 80
+    # 生产环境使用nginx做websocket的反向代理所监听的端口和host
     CHAT_WS_CLIENT_HOST = 'chat.enba.com'
+    # CHAT_WS_CLIENT_HOST = '10.211.55.4'
     CHAT_WS_CLIENT_PORT = 80
     CHAT_WS_CLIENT_ROUTE = 'ws/'
-
 
 
 # Application definition

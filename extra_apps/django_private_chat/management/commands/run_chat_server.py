@@ -34,16 +34,15 @@ class Command(BaseCommand):
         else:
             ensure_future = getattr(asyncio, "async")
 
-        ensure_future(
-            websockets.serve(
-                handlers.main_handler,
-                settings.CHAT_WS_SERVER_HOST,
-                settings.CHAT_WS_SERVER_PORT,
-                ssl=ssl_context
-            )
+        ws_server = websockets.serve(
+            handlers.main_handler,
+            settings.CHAT_WS_SERVER_HOST,
+            settings.CHAT_WS_SERVER_PORT,
+            ssl=ssl_context
         )
+        ensure_future(ws_server)
 
-        logger.info('Chat server started')
+        logger.info('Chat server started, Listen in [{}://{}:{}]'.format(settings.CHAT_WS_SERVER_PROTOCOL, settings.CHAT_WS_SERVER_HOST, settings.CHAT_WS_SERVER_PORT))
         ensure_future(handlers.new_messages_handler(channels.new_messages))
         ensure_future(handlers.users_changed_handler(channels.users_changed))
         ensure_future(handlers.gone_online(channels.online))
