@@ -40,11 +40,9 @@ router.register(r'dialog', DialogListViewSet, base_name='dialog')
 # "http://127.0.0.1:8000/api/message/?dialog=1&page=2"
 router.register(r'message', MessageListViewSet, base_name='message')
 
-
 # 用户点赞列表、添加点赞、删除点赞 6
 # select *from django_content_type
 router.register(r'likes', LikeToggleView, base_name='likes')
-
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -55,9 +53,9 @@ urlpatterns = [
     # drf自带的认证方式
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # jwt的认证方式
-    url(r'^login/', obtain_jwt_token),
+    url(r'^api/login/', obtain_jwt_token),
     # drf 文档
-    url(r'docs/', include_docs_urls(title="websocket api docs")),
+    url(r'api/docs/', include_docs_urls(title="websocket api docs")),
     # url(r"^likes/", include("pinax.likes.urls", namespace="pinax_likes")),
 
     url(r'', include('django_private_chat.urls')),

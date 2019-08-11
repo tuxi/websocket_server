@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = '&ds85fwdgh&r&e2*7xnfcmvva(s@h*%5r39+aau&8o!w^!0mjg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 AUTH_USER_MODEL = 'users.UserProfile'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'chat.enba.com', '10.211.55.4']
 
@@ -50,13 +50,13 @@ else:
     # 生产环境使用nginx做websocket的反向代理所监听的端口和host
     CHAT_WS_CLIENT_ROUTE = 'ws/'
 
-    CHAT_WS_CLIENT_HOST = 'chat.enba.com'
-    CHAT_WS_SERVER_PROTOCOL = 'wss'
-    CHAT_WS_CLIENT_PORT = 443
+    #CHAT_WS_CLIENT_HOST = 'chat.enba.com'
+    #CHAT_WS_SERVER_PROTOCOL = 'wss'
+    #CHAT_WS_CLIENT_PORT = 443
 
-    #CHAT_WS_CLIENT_HOST = '10.211.55.4'
-    #CHAT_WS_SERVER_PROTOCOL = 'ws'
-    #CHAT_WS_CLIENT_PORT = 80
+    CHAT_WS_CLIENT_HOST = '10.211.55.4'
+    CHAT_WS_SERVER_PROTOCOL = 'ws'
+    CHAT_WS_CLIENT_PORT = 80
 
 
 # Application definition
