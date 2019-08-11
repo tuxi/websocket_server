@@ -202,6 +202,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
    """
    dict = {
        "token": token,
-       'user': UserDetailSerializer(user, context={'request': request}).data
+       'user': UserDetailSerializer(user, context={'request': request}).data,
+       # sessionid 用于websocket连接的, 有时间再把sessionid的认证去掉，直接用token的方式认证
+       "sessionid": request.session.session_key
    }
    return dict
