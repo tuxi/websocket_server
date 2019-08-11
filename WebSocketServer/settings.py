@@ -192,7 +192,7 @@ USE_L10N = True
 USE_TZ = True
 # USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
 
-DATETIME_FORMAT = "d.m.Y H:i:s"
+DATETIME_FORMAT = "Y.m.d H:i:s"
 
 AUTHENTICATION_BACKENDS = (
     # 使用自定义的用户验证, 用户登录时调用 users.views.CustomBackend验证

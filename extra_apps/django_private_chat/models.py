@@ -23,6 +23,12 @@ class Dialog(TimeStampedModel):
         unique_together = (
             ("owner", "opponent"),
         )
+    def get_formatted_create_datetime(self):
+        return dj_date(localtime(self.created), settings.DATETIME_FORMAT)
+
+    def get_formatted_modify_datetime(self):
+        return dj_date(localtime(self.modified), settings.DATETIME_FORMAT)
+
 
 
 class Message(TimeStampedModel, SoftDeletableModel):

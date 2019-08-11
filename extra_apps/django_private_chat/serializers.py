@@ -14,9 +14,20 @@ class DialogDetailSerializer(serializers.ModelSerializer):
     owner = UserDetailSerializer()
     opponent = UserDetailSerializer()
 
+    modified = serializers.SerializerMethodField()
+    created = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Dialog
-        fields = '__all__'
+        fields = ('id', 'owner', 'opponent', 'created', 'modified')
+
+    def get_created(self, instance):
+
+        return instance.get_formatted_create_datetime()
+
+    def get_modified(self, instance):
+        return instance.get_formatted_modify_datetime()
 
 class DialogCreateSerializer(serializers.ModelSerializer):
     '''
@@ -46,9 +57,16 @@ class MessageDetailSerializer(serializers.ModelSerializer):
     一个聊天消息内容，暂时只支持文本
     '''
 
+    created = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
         fields = ('sender', 'text', 'read', 'is_removed', 'created', 'id')
+
+    def get_created(self, instance):
+
+        return instance.get_formatted_create_datetime()
+
 
 class MessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
