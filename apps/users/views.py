@@ -27,6 +27,7 @@ class CustomBackend(ModelBackend):
     def authenticate(self, request, mobile=None, username=None, password=None, **kwargs):
         '''
         自定义用户验证
+        因为jwt 只对用户名进行认证，我们重写认证方式，增加手机号认证
         :param request:
         :param mobile:
         :param password:
@@ -101,6 +102,7 @@ class SmsCodeViewSet(CreateModelMixin, viewsets.GenericViewSet):
                 },
                 status=status.HTTP_201_CREATED
             )
+
 
 class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
     '''

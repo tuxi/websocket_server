@@ -27,7 +27,7 @@ import xadmin
 
 from users.views import SmsCodeViewSet, UserViewSet
 from pinax.likes.apiviews import LikeToggleView
-from django_private_chat.views.apiview import DialogListView, MessageListView
+from django_private_chat.views.apiview import DialogListViewSet, MessageListViewSet
 
 # 通过router绑定url
 router = DefaultRouter()
@@ -36,8 +36,9 @@ router = DefaultRouter()
 router.register(r'code', SmsCodeViewSet, base_name='code')
 # 用户
 router.register(r'users', UserViewSet, base_name='users')
-router.register(r'dialog', DialogListView, base_name='dialog')
-router.register(r'message', MessageListView, base_name='message')
+router.register(r'dialog', DialogListViewSet, base_name='dialog')
+# "http://127.0.0.1:8000/api/message/?dialog=1&page=2"
+router.register(r'message', MessageListViewSet, base_name='message')
 
 
 # 用户点赞列表、添加点赞、删除点赞 6

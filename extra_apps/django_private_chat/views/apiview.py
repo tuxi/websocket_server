@@ -4,13 +4,14 @@ from rest_framework import viewsets, permissions, authentication, mixins
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework import filters
 
-from django_private_chat.filters import LikeFilter
+from django_private_chat.filters import MessageFilter
 from django_private_chat.models import Dialog, Message
 from utils.utils import CustomPagination
+from utils.permissions import IsOwnerOrReadOnly
 from django_private_chat.serializers import DialogDetailSerializer, DialogCreateSerializer, MessageDetailSerializer, MessageCreateSerializer
 
 
-class DialogListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class DialogListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     '''
     retrieve:
         根据dialog id获取会话详情
@@ -26,16 +27,16 @@ class DialogListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
     # 自定义分页
     pagination_class = CustomPagination
     ordering_fields = ('modified', 'created')
-    # 单独在此视图中配置访问权限, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
+    # 身份验证, 单独在此视图中配置身份验证, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
     authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
     def get_queryset(self):
         dialogs = Dialog.objects.filter(Q(owner=self.request.user) | Q(opponent=self.request.user))
         return dialogs
 
-
+    # 权限限制，目的是为了只有当前用户才可以操作自己的收藏数据
     def get_permissions(self):
-        return [permissions.IsAuthenticated()]
+        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
 
 
     def get_serializer_class(self):
@@ -47,11 +48,11 @@ class DialogListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
         return DialogDetailSerializer
 
     def destroy(self, request, *args, **kwargs):
-        return super(DialogListView, self).destroy(request)
+        return super(DialogListViewSet, self).destroy(request)
 
 
 
-class MessageListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class MessageListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     '''
     create:
         创建message
@@ -67,19 +68,21 @@ class MessageListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Des
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     # 根据回话id获取所有聊天内容
-    filter_class = LikeFilter
+    filter_class = MessageFilter
 
     # 按照时间排序消息
     ordering_fields = ('created', )
-    # 单独在此视图中配置访问权限, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
+
+    # 身份验证, 单独在此视图中配置身份验证, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
     authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
     def get_queryset(self):
         messages = Message.objects.all()
         return messages
 
+    # 权限限制，目的是为了只有当前用户才可以操作自己的收藏数据
     def get_permissions(self):
-        return [permissions.IsAuthenticated()]
+        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
 
 
     def get_serializer_class(self):
@@ -89,5 +92,5 @@ class MessageListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Des
         return MessageDetailSerializer
 
     def destroy(self, request, *args, **kwargs):
-        return super(MessageListView, self).destroy(request)
+        return super(MessageListViewSet, self).destroy(request)
 
