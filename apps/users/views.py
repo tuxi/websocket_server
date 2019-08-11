@@ -200,6 +200,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
    :param request:
    :return:
    """
+   if not request.session.session_key:
+       request.session.create()
    dict = {
        "token": token,
        'user': UserDetailSerializer(user, context={'request': request}).data,
