@@ -19,7 +19,7 @@ from django.views.static import serve
 # django rest_framework
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 from WebSocketServer.settings import MEDIA_ROOT, STATICFILES_DIRS, DEBUG
 
@@ -54,6 +54,8 @@ urlpatterns = [
 
     # jwt的认证方式， 在iOS端使用的是jwt的认证方式，未使用rf自带的认证方式
     url(r'^api/login/', obtain_jwt_token),
+    # 接受心跳包，验证jwt token是否有效，如果无效则以退出登陆
+    url(r'^api/heartbeat/', verify_jwt_token),
     # drf 文档
     url(r'api/docs/', include_docs_urls(title="websocket api docs")),
 
