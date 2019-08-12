@@ -14,6 +14,10 @@ from django.db.models import Q
 
 
 class DialogListView(LoginRequiredMixin, generic.ListView):
+    '''
+    与某个用户对话
+    url中获取这个username
+    '''
     template_name = 'django_private_chat/dialogs.html'
     model = models.Dialog
     ordering = 'modified'

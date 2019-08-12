@@ -84,7 +84,7 @@ DJANGO_PRIVATE_CHAT = [
     # django-private-chat config
     'debug_toolbar',
     'django_private_chat',
-    'chat.apps.ChatConfig'
+    'chat.apps.ChatConfig',
 ]
 
 EXTRA_APPS += DJANGO_PRIVATE_CHAT
@@ -92,12 +92,14 @@ EXTRA_APPS += DJANGO_PRIVATE_CHAT
 PERSONAL_APPS = [
     'users.apps.UsersConfig',
     'pinax.likes.apps.AppConfig',
+    'home.apps.HomeConfig',
 ]
 
 INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
 
 
 l = [
+    'corsheaders.middleware.CorsMiddleware', #解决前端跨域问题
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -106,7 +108,6 @@ l = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', #解决前端跨域问题
 ]
 
 from django import get_version

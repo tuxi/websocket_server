@@ -104,8 +104,10 @@ class SmsCodeViewSet(CreateModelMixin, viewsets.GenericViewSet):
             )
 
 
-class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
+class UserViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
     '''
+    list:
+        获取所有用户列表
     retrieve:
         获取用户详情
     create:

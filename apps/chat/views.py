@@ -10,3 +10,7 @@ class UserListView(LoginRequiredMixin, generic.ListView):
     slug_url_kwarg = 'username'
     template_name = 'chat/users.html'
     login_url = 'xadmin/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        return context

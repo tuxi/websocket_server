@@ -28,6 +28,7 @@ import xadmin
 from users.views import SmsCodeViewSet, UserViewSet
 from pinax.likes.apiviews import LikeToggleView
 from django_private_chat.views.apiview import DialogListViewSet, MessageListViewSet
+from home.views import HomeView
 
 # 通过router绑定url
 router = DefaultRouter()
@@ -50,16 +51,22 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
 
     url(r'^static/(?P<path>.*)$', serve, {'document_root': STATICFILES_DIRS[0]}, name='static'),
-    # drf自带的认证方式
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # jwt的认证方式
+
+    # jwt的认证方式， 在iOS端使用的是jwt的认证方式，未使用rf自带的认证方式
     url(r'^api/login/', obtain_jwt_token),
     # drf 文档
     url(r'api/docs/', include_docs_urls(title="websocket api docs")),
-    # url(r"^likes/", include("pinax.likes.urls", namespace="pinax_likes")),
 
-    url(r'', include('django_private_chat.urls')),
-    url(r'', include('chat.urls'))
+    # 测试聊天的页面
+    # 所有用户页面
+    url(r'test/', include('django_private_chat.urls')),
+    # 通过username 与某个用户发起对话的页面
+    url(r'test/', include('chat.urls')),
+    url(r'^$', view=HomeView.as_view(), name='home'),
+
+    # drf自带的认证方式
+    # drf登陆的路由为auth/drf/login/ 退出为auth/drf/logout/
+    url(r'^auth/drf/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 
