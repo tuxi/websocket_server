@@ -282,4 +282,4 @@ DEBUG_TOOLBAR_CONFIG = {
 if DEBUG:
     drf_docs_schema_url = ""
 else:
-    drf_docs_schema_url = "http://chat.enba.com/"
+    drf_docs_schema_url = "https://chat.enba.com/"
