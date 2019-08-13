@@ -13,7 +13,7 @@ ws_connections = {}
 
 
 # ws_auth_type 为客户端连接websocket服务端的鉴权字段，有两种方式：session_key 和 jwt_token
-ws_auth_type_jwt_token = "jwt_token"
+ws_auth_type_jwt_token = "token"
 ws_auth_type_session_key = "session_key"
 ws_auth_type = ws_auth_type_jwt_token
 ws_auth_type_list = [ws_auth_type_jwt_token, ws_auth_type_session_key]

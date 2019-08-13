@@ -21,14 +21,14 @@ def get_user_from_session(session_key):
     user = get_user_model().objects.filter(id=uid).first()  # get object or none
     return user
 
-def get_user_from_jwt_token(jwt_token):
+def get_user_from_jwt_token(token):
     """
     根据jwt_token 获取用户
-    :param jwt_token: jwt token
+    :param token: token
     :return: User instance or None if not found
     """
     # 根据token获取jwt 的 payload
-    payload = jwt_decode_handler(token=jwt_token)
+    payload = jwt_decode_handler(token=token)
     # 根据payload 获取username
     username = jwt_get_username_from_payload_handler(payload=payload)
 
