@@ -194,8 +194,8 @@
 
             function setupChatWebSocket() {
                 var opponent_username = getOpponnentUsername();
-                websocket = new WebSocket(base_ws_server_path + '{{ request.session.session_key }}/' + opponent_username);
-
+                // 前端指明使用session的授权方式 连接websocket
+                websocket = new WebSocket(base_ws_server_path + '?session_key={{ request.session.session_key }}' + '&opponent={{ opponent_username }}');
                 websocket.onopen = function (event) {
                     var opponent_username = getOpponnentUsername();
 

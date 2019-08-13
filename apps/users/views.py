@@ -1,6 +1,5 @@
 from random import choice
 
-from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
@@ -202,12 +201,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
    :param request:
    :return:
    """
-   if not request.session.session_key:
-       request.session.create()
    dict = {
        "token": token,
        'user': UserDetailSerializer(user, context={'request': request}).data,
-       # sessionid 用于websocket连接的, 有时间再把sessionid的认证去掉，直接用token的方式认证
-       "sessionid": request.session.session_key
    }
    return dict

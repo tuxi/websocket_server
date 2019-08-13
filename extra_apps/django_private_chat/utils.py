@@ -1,10 +1,13 @@
 from django.contrib.sessions.models import Session
 from django.contrib.auth import get_user_model
+from rest_framework_jwt.utils import jwt_decode_handler, jwt_get_username_from_payload_handler
+
 from .models import Dialog
 from django.db.models import Q
 import logging
 import sys
 
+User = get_user_model()
 
 def get_user_from_session(session_key):
     """
@@ -18,6 +21,30 @@ def get_user_from_session(session_key):
     user = get_user_model().objects.filter(id=uid).first()  # get object or none
     return user
 
+def get_user_from_jwt_token(jwt_token):
+    """
+    根据jwt_token 获取用户
+    :param jwt_token: jwt token
+    :return: User instance or None if not found
+    """
+    # 根据token获取jwt 的 payload
+    payload = jwt_decode_handler(token=jwt_token)
+    # 根据payload 获取username
+    username = jwt_get_username_from_payload_handler(payload=payload)
+
+    if not username:
+       return None
+
+    # Make sure user exists
+    try:
+        user = User.objects.get_by_natural_key(username)
+    except User.DoesNotExist:
+        return None
+
+    if not user.is_active:
+        return None
+
+    return user
 
 def get_dialogs_with_user(user_1, user_2):
     """
