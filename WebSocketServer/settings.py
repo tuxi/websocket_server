@@ -99,10 +99,10 @@ INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
 
 
 l = [
-    'corsheaders.middleware.CorsMiddleware', #解决前端跨域问题
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #解决前端跨域问题
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -235,7 +235,7 @@ STATICFILES_DIRS = [
 ]
 
 # 部署时收集静态文件collecstatic需要的目录配置，部署完成后注释掉，不然debug下报错无法读取static下的文件
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = "/media/"
 
@@ -276,3 +276,10 @@ DEBUG_TOOLBAR_CONFIG = {
     # 此项原本为google指向的一个js，改成这样就不会报404了。
     'JQUERY_URL': '//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'
 }
+
+
+# 我的[这篇文章](https://objc.com/article/56)记录了，drf自动生成的文档导致跨域的问题
+if DEBUG:
+    drf_docs_schema_url = ""
+else:
+    drf_docs_schema_url = "http://chat.enba.com/"

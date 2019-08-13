@@ -14,6 +14,7 @@ from .serializers import SmsSerializer, UserRegisterSerializer, UserDetailSerial
 from utils.yunpian import YunPian
 from WebSocketServer.settings import YUNPIAN_APIKEY
 from .models import VerifyCode
+from utils.permissions import IsOwnerOrReadOnly
 
 # Create your views here.
 
@@ -141,12 +142,12 @@ class UserViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, RetrieveMo
     def get_permissions(self):
         # 动态加载权限验证
         if self.action == 'retrieve':
-            return [permissions.IsAuthenticated()]
+            return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
         elif self.action == 'create':
             return []
         elif self.action == 'update' or self.action == 'partial_update':
-            return [permissions.IsAuthenticated()]
-        return []
+            return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
+        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

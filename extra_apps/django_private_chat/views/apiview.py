@@ -34,7 +34,7 @@ class DialogListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
         dialogs = Dialog.objects.filter(Q(owner=self.request.user) | Q(opponent=self.request.user))
         return dialogs
 
-    # 权限限制，目的是为了只有当前用户才可以操作自己的收藏数据
+    # 权限限制，目的是为了只有当前用户才可以操作自己的对话
     def get_permissions(self):
         return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
 

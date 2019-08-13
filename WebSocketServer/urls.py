@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
-from WebSocketServer.settings import MEDIA_ROOT, STATICFILES_DIRS, DEBUG
+from WebSocketServer.settings import MEDIA_ROOT, STATICFILES_DIRS, DEBUG, drf_docs_schema_url
 
 import xadmin
 
@@ -57,7 +57,7 @@ urlpatterns = [
     # 接受心跳包，验证jwt token是否有效，如果无效则以退出登陆
     url(r'^api/heartbeat/', verify_jwt_token),
     # drf 文档
-    url(r'api/docs/', include_docs_urls(title="websocket api docs")),
+    url(r'api/docs/', include_docs_urls(title="websocket api docs", schema_url=drf_docs_schema_url)),
 
     # 测试聊天的页面
     # 所有用户页面
