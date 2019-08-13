@@ -3,7 +3,7 @@
 
 
 ### 前端示例
-http://chat.enba.com/dialogs/
+http://chat.enba.com
 需要先登录
 ```
 useername: xiaoyuan
@@ -12,6 +12,26 @@ password: admin123
 useername: user1
 password: admin123
 ```
+
+### WebSocket 的验证方式
+支持jwt 和 session 两种方式对websocket进行鉴权
+```
+ws_auth_type_jwt_token = "jwt_token"
+ws_auth_type_session_key = "session_key"
+```
+
+- 连接的示例url path
+```
+ws://127.0.0.1:5002/?jwt_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6IjE4OTAxMTA4NzE5IiwiZXhwIjoxNTY2Mjc2OTc2LCJlbWFpbCI6IiIsIm1vYmlsZSI6IjE4OTAxMTA4NzE5In0.IzgSstfFrDB2ehf778HHx-2Hrw6YDE54_sexFAhC9Z0&opponent=xiaoyuan
+```  
+
+- 建立连接
+```
+let base_ws_server_path = 'wss://chat.enba.com'
+let opponent_username = 'xiaoyuan'
+websocket = new WebSocket(base_ws_server_path + '?session_key={{ request.session.session_key }}' + '&opponent={{ opponent_username }}');
+```
+
 
 ### 初始化项目
 
