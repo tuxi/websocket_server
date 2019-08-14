@@ -34,9 +34,9 @@ class DialogListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
         dialogs = Dialog.objects.filter(Q(owner=self.request.user) | Q(opponent=self.request.user))
         return dialogs
 
-    # 权限限制，目的是为了只有当前用户才可以操作自己的对话
+    # 权限限制
     def get_permissions(self):
-        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
+        return [permissions.IsAuthenticated()]
 
 
     def get_serializer_class(self):
@@ -80,9 +80,9 @@ class MessageListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         messages = Message.objects.all()
         return messages
 
-    # 权限限制，目的是为了只有当前用户才可以操作自己的收藏数据
+    # 权限限制
     def get_permissions(self):
-        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
+        return [permissions.IsAuthenticated()]
 
 
     def get_serializer_class(self):
