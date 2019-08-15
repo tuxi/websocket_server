@@ -18,7 +18,7 @@ class DialogListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
     create:
         创建会话
     list:
-        获取当前用户的所有会话列表, 分页，排序
+        获取当前用户的所有会话列表, 分页，排序；这条dialog的 owner 和 opponent 是当前用户才可以获取到
     destory:
         根据id删除会话
 
@@ -77,7 +77,8 @@ class MessageListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
     authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
     def get_queryset(self):
-        messages = Message.objects.all()
+        # 匹配这条消息的发起者或者接受者为当前用户
+        messages = Message.objects.filter(Q(dialog__opponent=self.request.user) | Q(dialog__owner=self.request.user))
         return messages
 
     # 权限限制

@@ -47,6 +47,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
     '''
     用户详情序列化
     '''
+
+
     class Meta:
         model = User
         fields = ( 'id', 'nickname', 'username' ,'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website', 'summary')
