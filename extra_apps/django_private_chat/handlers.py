@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 from . import models, router
 from .utils import get_dialogs_with_user, get_user_from_session, get_user_from_jwt_token
 
-
 logger = logging.getLogger('django-private-dialog')
 ws_connections = {}
 
@@ -15,7 +14,6 @@ ws_connections = {}
 # ws_auth_type 为客户端连接websocket服务端的鉴权字段，有两种方式：session_key 和 jwt_token
 ws_auth_type_jwt_token = "token"
 ws_auth_type_session_key = "session_key"
-# ws_auth_type = ws_auth_type_jwt_token
 ws_auth_type_list = [ws_auth_type_jwt_token, ws_auth_type_session_key]
 
 def get_user_from_auth_id(auth_key, auth_type):
@@ -23,16 +21,18 @@ def get_user_from_auth_id(auth_key, auth_type):
         return get_user_from_session(auth_key)
     return get_user_from_jwt_token(auth_key)
 
-def getAuthFromPacket(packet_dict):
+def get_auth_from_packet(packet_dict={}):
     '''
     同时支持token 和 session 的请求方式
     :param packet_dict:
     :return: auth_id, auth_type
     '''
+    if not packet_dict or not isinstance(packet_dict, dict) or not len(packet_dict):
+        return
     auth_type = None
     auth_id = None
     for _auth_type in ws_auth_type_list:
-        _auth_id = packet_dict[_auth_type]
+        _auth_id = packet_dict.get(_auth_type)
         if _auth_id and len(_auth_id) > 0:
             # 匹配ws url参数中的ws_auth_type，找到了就全局使用此授权方式
             # 根据客户端连接请求的参数，确定使用哪一种授权方式
@@ -80,7 +80,7 @@ def gone_online(stream):
     """
     while True:
         packet = yield from stream.get()
-        auth_id, auth_type = getAuthFromPacket(packet)
+        auth_id, auth_type = get_auth_from_packet(packet)
         if auth_id:
             user_owner = get_user_from_auth_id(auth_id, auth_type)
             if user_owner:
@@ -104,7 +104,7 @@ def check_online(stream):
     """
     while True:
         packet = yield from stream.get()
-        auth_id, auth_type = getAuthFromPacket(packet)
+        auth_id, auth_type = get_auth_from_packet(packet)
         opponent_username = packet.get('username')
         if auth_id and opponent_username:
             user_owner = get_user_from_auth_id(auth_id, auth_type)
@@ -134,7 +134,7 @@ def gone_offline(stream):
     """
     while True:
         packet = yield from stream.get()
-        auth_id, auth_type = getAuthFromPacket(packet)
+        auth_id, auth_type = get_auth_from_packet(packet)
         if auth_id:
             user_owner = get_user_from_auth_id(auth_id, auth_type)
             if user_owner:
@@ -159,7 +159,7 @@ def new_messages_handler(stream):
     # TODO: handle no user found exception
     while True:
         packet = yield from stream.get()
-        auth_id, auth_type = getAuthFromPacket(packet)
+        auth_id, auth_type = get_auth_from_packet(packet)
         msg = packet.get('message')
         username_opponent = packet.get('username')
         if auth_id and msg and username_opponent:
@@ -232,7 +232,7 @@ def is_typing_handler(stream):
     """
     while True:
         packet = yield from stream.get()
-        auth_id, auth_type = getAuthFromPacket(packet)
+        auth_id, auth_type = get_auth_from_packet(packet)
         user_opponent = packet.get('username')
         typing = packet.get('typing')
         if auth_id and user_opponent and typing is not None:
@@ -255,7 +255,7 @@ def read_message_handler(stream):
     """
     while True:
         packet = yield from stream.get()
-        auth_id, auth_type = getAuthFromPacket(packet)
+        auth_id, auth_type = get_auth_from_packet(packet)
         user_opponent = packet.get('username')
         message_id = packet.get('message_id')
         if auth_id and user_opponent and message_id is not None:
@@ -288,7 +288,7 @@ def main_handler(websocket, path):
     client and routes the message to the proper queue.
 
     This coroutine can be thought of as a producer.
-    path: ws://127.0.0.1:5002/?jwt_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6IjE4OTAxMTA4NzE5IiwiZXhwIjoxNTY2Mjc2OTc2LCJlbWFpbCI6IiIsIm1vYmlsZSI6IjE4OTAxMTA4NzE5In0.IzgSstfFrDB2ehf778HHx-2Hrw6YDE54_sexFAhC9Z0&opponent=xiaoyuan
+    path: ws://127.0.0.1:5002/?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6IjE4OTAxMTA4NzE5IiwiZXhwIjoxNTY2Mjc2OTc2LCJlbWFpbCI6IiIsIm1vYmlsZSI6IjE4OTAxMTA4NzE5In0.IzgSstfFrDB2ehf778HHx-2Hrw6YDE54_sexFAhC9Z0&opponent=xiaoyuan
     """
     
     # 对 连接websocket的url的参数进行解析
