@@ -156,11 +156,25 @@ WSGI_APPLICATION = 'WebSocketServer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+MYSQL_CONFIG = {
+        'ENGINE': 'django.db.backends.mysql',   # 数据库引擎
+        'NAME': 'chatserver',         # 你要存储数据的库名，事先要创建之
+        'USER': 'root',            # 数据库用户名
+        'PASSWORD': 'root',        # 密码
+        'HOST': 'localhost',       # 主机
+        'PORT': '3306',            # 数据库使用的端口
+        # 数据库引擎 用于后期第三方登录数据表的建立，charset': 'utf8mb4'支持emoji
+        "OPTIONS":{"init_command":"SET default_storage_engine=INNODB;", 'charset': 'utf8mb4'},
+}
+
+SQLLITE_CONFIG = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+}
+
+# 数据库配置，如果需要快速测试，可将MYSQL_CONFIG替换为SQLLITE_CONFIG
+DATABASES = {
+    'default': MYSQL_CONFIG
 }
 
 
