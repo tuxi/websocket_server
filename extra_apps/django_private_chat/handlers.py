@@ -180,7 +180,7 @@ def new_messages_handler(stream):
                     packet['sender_name'] = msg.sender.username
                     packet['message_id'] = msg.id
                     # 移除消息中auth
-                    [packet.pop(key) for key in  ws_auth_type_list]
+                    [packet.pop(key) for key in ws_auth_type_list if key in packet.keys()]
 
                     # Send the message
                     connections = []
