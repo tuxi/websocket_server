@@ -6,13 +6,14 @@
 ### 前端示例
 http://chat.enba.com
 需要先登录
-```
-username: xiaoyuan
-password: admin123
 
-username: ketao
-password: admin123
-```
+- [测试](https://chat.enba.com/test/)用户
+
+username | password
+:-: | :-: 
+user1 | password123 | 
+user2 | password123 |
+
 
 ### WebSocket 的验证方式
 支持jwt 和 session 两种方式对websocket进行鉴权
