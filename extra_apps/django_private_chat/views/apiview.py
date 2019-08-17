@@ -24,6 +24,7 @@ class DialogListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
 
     '''
     serializer_class = DialogDetailSerializer
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     # 自定义分页
     pagination_class = CustomPagination
     ordering_fields = ('modified', 'created')
@@ -67,7 +68,7 @@ class MessageListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
     pagination_class = CustomPagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # 根据回话id获取所有聊天内容
+    # 自定义filter 实现根据dialog id获取所有聊天内容
     filter_class = MessageFilter
 
     # 按照时间排序消息
