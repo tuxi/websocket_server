@@ -1,15 +1,16 @@
 ### websocket server
 基于[django-private-chat](https://github.com/Bearle/django-private-chat) 和 djangorestframework 的websockt 服务端示例
 
+![websocket client](https://static.objc.com/enba/static/websocketclient.gif)
 
 ### 前端示例
 http://chat.enba.com
 需要先登录
 ```
-useername: xiaoyuan
+username: xiaoyuan
 password: admin123
 
-useername: user1
+username: ketao
 password: admin123
 ```
 

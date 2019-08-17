@@ -8,6 +8,7 @@ logger = logging.getLogger('django-private-dialog')
 
 
 class MessageRouter(object):
+    # 接收客户端发送的不同消息类型队列
     MESSAGE_QUEUES = {
         'new-message': new_messages,
         'new-user': users_changed,
@@ -34,4 +35,8 @@ class MessageRouter(object):
         yield from send_queue.put(self.packet)
 
     def get_send_queue(self):
+        '''
+        根据type获取当前要发送的消息队列
+        :return: 当前消息队列
+        '''
         return self.MESSAGE_QUEUES[self.get_packet_type()]

@@ -154,6 +154,7 @@ def gone_offline(stream):
 @asyncio.coroutine
 def new_messages_handler(stream):
     """
+    将新的聊天信息保存到数据库并将消息分发给已连接的用户
     Saves a new chat message to db and distributes msg to connected users
     """
     # TODO: handle no user found exception
@@ -178,6 +179,8 @@ def new_messages_handler(stream):
                     packet['created'] = msg.get_formatted_create_datetime()
                     packet['sender_name'] = msg.sender.username
                     packet['message_id'] = msg.id
+                    # 移除消息中auth
+                    [packet.pop(key) for key in  ws_auth_type_list]
 
                     # Send the message
                     connections = []
@@ -205,6 +208,7 @@ def new_messages_handler(stream):
 @asyncio.coroutine
 def users_changed_handler(stream):
     """
+    发送聊天室中当前活动用户的已连接客户端列表
     Sends connected client list of currently active users in the chatroom
     """
     while True:
@@ -251,6 +255,7 @@ def is_typing_handler(stream):
 @asyncio.coroutine
 def read_message_handler(stream):
     """
+    如果对方已阅读消息，则向用户发送消息
     Send message to user if the opponent has read the message
     """
     while True:
