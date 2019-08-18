@@ -39,13 +39,41 @@ def get_auth_from_packet(packet_dict={}):
             auth_type = _auth_type
             auth_id = _auth_id
             break
-    if auth_type is None:
-        logger.info("Don't Got None auth_type attempt to connect ")
-    if auth_id is None:
-        logger.info("Don't Got None auth_id attempt to connect ")
-
+    if auth_type is None or auth_id is None:
+        err = "Don't Got None (auth_type or auth_id) attempt to connect "
+        logger.info(err)
+        return
     return auth_id, auth_type
 
+def ws_authenticate(websocet, path):
+
+    # 对 连接websocket的url的参数进行解析
+
+    # url解码
+    url_data = parse.unquote(path)
+    # url结果
+    url_result = parse.urlparse(url_data)
+    # 解析url里面的参数
+    query_dict = parse.parse_qs(url_result.query)
+
+    opponent_username = query_dict.get('opponent', "")[0]
+
+    auth_id = None
+    auth_type = None
+    for _auth_type in ws_auth_type_list:
+        auth_key = query_dict.get(_auth_type, [])
+        if len(auth_key) > 0:
+            # 匹配ws url参数中的ws_auth_type，找到了就全局使用此授权方式
+            # 根据客户端连接请求的参数，确定使用哪一种授权方式
+            auth_type = _auth_type
+            auth_id = auth_key[0]
+            break
+    if auth_type is None or auth_id is None:
+        err = "Don't Got None (auth_type or auth_id) attempt to connect "
+        logger.info(err)
+        return
+
+    return get_user_from_auth_id(auth_id, auth_type), opponent_username
 
 @asyncio.coroutine
 def target_message(conn, payload):
@@ -295,40 +323,11 @@ def main_handler(websocket, path):
     This coroutine can be thought of as a producer.
     path: ws://127.0.0.1:5002/?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6IjE4OTAxMTA4NzE5IiwiZXhwIjoxNTY2Mjc2OTc2LCJlbWFpbCI6IiIsIm1vYmlsZSI6IjE4OTAxMTA4NzE5In0.IzgSstfFrDB2ehf778HHx-2Hrw6YDE54_sexFAhC9Z0&opponent=xiaoyuan
     """
-    
-    # 对 连接websocket的url的参数进行解析
-
-    # url解码
-    url_data = parse.unquote(path)
-    # url结果
-    url_result = parse.urlparse(url_data)
-    # 解析url里面的参数
-    query_dict = parse.parse_qs(url_result.query)
-
-    username = query_dict.get('opponent', "")[0]
-
-    auth_id = None
-    auth_type = None
-    for _auth_type in ws_auth_type_list:
-        auth_key = query_dict.get(_auth_type, [])
-        if len(auth_key) > 0:
-            # 匹配ws url参数中的ws_auth_type，找到了就全局使用此授权方式
-            # 根据客户端连接请求的参数，确定使用哪一种授权方式
-            auth_type = _auth_type
-            auth_id = auth_key[0]
-            break
-    if auth_id is None:
-        logger.info("Don't Got None auth_id attempt to connect ")
-        return
-    if auth_type is None:
-        logger.info("Don't Got None auth_type attempt to connect ")
-        return
-
-    user_owner = get_user_from_auth_id(auth_id, auth_type)
+    user_owner, opponent_username = ws_authenticate(websocket, path)
     if user_owner:
         user_owner = user_owner.username
         # Persist users connection, associate user w/a unique ID
-        ws_connections[(user_owner, username)] = websocket
+        ws_connections[(user_owner, opponent_username)] = websocket
 
         # While the websocket is open, listen for incoming messages/events
         # if unable to listening for messages/events, then disconnect the client
@@ -346,6 +345,6 @@ def main_handler(websocket, path):
         except websockets.exceptions.InvalidState:  # User disconnected
             pass
         finally:
-            del ws_connections[(user_owner, username)]
+            del ws_connections[(user_owner, opponent_username)]
     else:
-        logger.info("Got invalid session_id attempt to connect " + auth_id)
+        logger.info("Not user owner,  Got invalid auth_id attempt to connect ")

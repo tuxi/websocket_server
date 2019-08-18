@@ -1,6 +1,3 @@
-from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-
 try:
     from django.urls import reverse
 except ImportError:
@@ -8,9 +5,23 @@ except ImportError:
 from django_private_chat import models
 from django_private_chat import utils
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
+from django.contrib.auth import get_user_model
+
+class UserListView(LoginRequiredMixin, generic.ListView):
+    model = get_user_model()
+    # These next two lines tell the view to index lookups by username
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    template_name = 'django_private_chat/users.html'
+    login_url = '/xadmin/'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserListView, self).get_context_data()
+        return context
 
 
 class DialogListView(LoginRequiredMixin, generic.ListView):
@@ -27,7 +38,7 @@ class DialogListView(LoginRequiredMixin, generic.ListView):
         return dialogs
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+        context = super(DialogListView, self).get_context_data()
         if self.kwargs.get('username'):
             # TODO: show alert that user is not found instead of 404
             user = get_object_or_404(get_user_model(), username=self.kwargs.get('username'))

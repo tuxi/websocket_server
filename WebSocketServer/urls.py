@@ -60,10 +60,7 @@ urlpatterns = [
     url(r'api/docs/', include_docs_urls(title="websocket api docs", schema_url=drf_docs_schema_url)),
 
     # 测试聊天的页面
-    # 所有用户页面
     url(r'test/', include('django_private_chat.urls')),
-    # 通过username 与某个用户发起对话的页面
-    url(r'test/', include('chat.urls')),
     url(r'^$', view=HomeView.as_view(), name='home'),
 
     # drf自带的认证方式

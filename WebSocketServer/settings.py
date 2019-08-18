@@ -84,7 +84,6 @@ DJANGO_PRIVATE_CHAT = [
     # django-private-chat config
     'debug_toolbar',
     'django_private_chat',
-    'chat.apps.ChatConfig',
 ]
 
 EXTRA_APPS += DJANGO_PRIVATE_CHAT

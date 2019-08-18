@@ -13,4 +13,9 @@ urlpatterns = [
         view=view.DialogListView.as_view(),
         name='dialogs'
     ),
+    url(
+        regex=r'^$',
+        view=view.UserListView.as_view(),
+        name='user_list'
+    ),
 ]
