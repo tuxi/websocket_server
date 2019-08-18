@@ -20,6 +20,4 @@ django-appconf  # pinax的依赖
 mysqlclient==1.3.10
 
 
--r ./requirements_djangoprivatechat.txt
-packaging==16.8
-django-debug-toolbar==1.6
+-r ./extra_apps/django_private_chat/requirements.txt
